@@ -35,7 +35,8 @@ Summary:        The Ermete OS Chimera Kernel (CachyOS Base, BORE, NTSync, UKSM, 
 License:        GPLv2
 URL:            https://github.com/CachyOS/linux-cachyos
 
-Source0:        ermete-bedrock.cfg
+Source0:        linux-cachyos.tar.gz
+Source1:        ermete-bedrock.cfg
 
 BuildRequires:  clang llvm lld
 BuildRequires:  make cmake bison flex elfutils-libelf-devel openssl-devel
@@ -53,9 +54,10 @@ The Ermete OS Chimera Kernel combines CachyOS kernel performance improvements
 maximum throughput, 1GB HugePages for KVM/AI workloads, and full Fedora OSTree/SELinux compatibility.
 
 %prep
+%setup -c -n linux-cachyos
 # Prepare build tree and apply bedrock config overrides
-if [ -f %{SOURCE0} ]; then
-    cat %{SOURCE0} >> .config
+if [ -f %{SOURCE1} ]; then
+    cat %{SOURCE1} >> .config
 fi
 
 %build

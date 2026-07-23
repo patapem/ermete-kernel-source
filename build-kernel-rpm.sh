@@ -24,10 +24,6 @@ echo ">>> Copia dei file di configurazione e Spec..."
 cp ermete-bedrock.cfg "$RPMBUILD_DIR/SOURCES/"
 cp ermete-kernel.spec "$RPMBUILD_DIR/SPECS/"
 
-echo ">>> Applicazione Best Practice RPM (setup extraction)..."
-sed -i 's/%prep/%prep\n%setup -c -n linux-cachyos/g' "$RPMBUILD_DIR/SPECS/ermete-kernel.spec"
-sed -i '/Source0:/a Source1:        linux-cachyos.tar.gz' "$RPMBUILD_DIR/SPECS/ermete-kernel.spec"
-
 echo ">>> Avvio compilazione RPM tramite rpmbuild..."
 rpmbuild --define "_topdir $RPMBUILD_DIR" -ba "$RPMBUILD_DIR/SPECS/ermete-kernel.spec"
 
