@@ -73,6 +73,14 @@ export KBUILD_CFLAGS="%{kcflags}"
 make olddefconfig
 make -j$(nproc) bzImage modules
 
+%package devel
+Summary:        Development package for building kernel modules to match the Chimera kernel
+Provides:       kernel-devel = %{version}-%{release}
+
+%description devel
+This package provides kernel headers and makefiles sufficient to build modules
+against the %{pkg_name} package.
+
 %install
 mkdir -p %{buildroot}/boot
 
@@ -83,14 +91,29 @@ cp arch/x86/boot/bzImage %{buildroot}/boot/vmlinuz-$KREL-chimera
 cp System.map %{buildroot}/boot/System.map-$KREL-chimera
 cp .config %{buildroot}/boot/config-$KREL-chimera
 
+# Install kernel-devel source tree for module building
+mkdir -p %{buildroot}/usr/src/kernels/$KREL-chimera
+echo "Copying kernel headers and makefiles..."
+rsync -a --prune-empty-dirs --include '*/' --include '*.h' --include 'Makefile*' --include 'Kbuild*' --include 'Kconfig*' --include 'Module.symvers' --include '.config' --include 'scripts/***' --include 'tools/***' --exclude '*' ./ %{buildroot}/usr/src/kernels/$KREL-chimera/
+# Copy some missing binaries required by akmods
+cp -a scripts %{buildroot}/usr/src/kernels/$KREL-chimera/
+
+# Fix the symlink in /lib/modules so it points to our new kernel-devel directory
+rm -f %{buildroot}/lib/modules/$KREL/build
+rm -f %{buildroot}/lib/modules/$KREL/source
+ln -snf /usr/src/kernels/$KREL-chimera %{buildroot}/lib/modules/$KREL/build
+ln -snf /usr/src/kernels/$KREL-chimera %{buildroot}/lib/modules/$KREL/source
+
 %files
 /boot/vmlinuz-*
 /boot/System.map-*
 /boot/config-*
 /lib/modules/*
 
+%files devel
+/usr/src/kernels/*
+
 %changelog
 * Thu Jul 23 2026 Kernel Alchemist <kernel@ermeteos.org> - 6.14-1.chimera
-- Ermete OS Chimera Kernel initial release based on CachyOS linux-cachyos.
-- LLVM/Clang ThinLTO, -O3, x86-64-v3, NTSync, UKSM, LRNG, 1GB HugePages, Mitigations Off.
-- Fedora OSTree & SELinux compatibility preserved.
+- Added kernel-devel package for out-of-tree module compilation (Nvidia)
+- Fix broken symlinks in /lib/modules/*/build
