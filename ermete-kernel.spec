@@ -23,6 +23,7 @@
 %define _without_perf 1
 %define _without_tools 1
 %define _without_selftests 1
+%define debug_package %{nil}
 
 # Binary payload compression
 %define _binary_payload w1.zstdio
