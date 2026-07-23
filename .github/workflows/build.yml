@@ -16,16 +16,26 @@ jobs:
     - name: Setup RPM Build Environment
       run: |
           dnf update -y
-          dnf install -y rpm-build rpmdevtools clang lld llvm make cmake bison flex elfutils-libelf-devel openssl-devel ncurses-devel rsync tar bc cpio python3 zstd jq curl git
+          dnf install -y rpm-build rpmdevtools clang lld llvm make cmake bison flex elfutils-libelf-devel openssl-devel ncurses-devel rsync tar bc cpio python3 zstd jq curl git ccache
           
           # Creazione utente isolato per rpmbuild
           useradd builder -m
           echo "builder ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
           chown -R builder:builder .
           
+    - name: Cache Compiler (ccache)
+      uses: actions/cache@v4
+      with:
+        path: /home/builder/.ccache
+        key: ccache-kernel-chimera-${{ github.run_id }}
+        restore-keys: |
+          ccache-kernel-chimera-
+          
     - name: Build RPM Packages via build-kernel-rpm.sh
       run: |
-          sudo -H -E -u builder bash -c "./build-kernel-rpm.sh"
+          export CC="ccache clang"
+          export CXX="ccache clang++"
+          sudo -H -E -u builder bash -c "export CC='ccache clang' && export CXX='ccache clang++' && ./build-kernel-rpm.sh"
           
     - name: Upload Binary RPMs
       uses: actions/upload-artifact@v4
