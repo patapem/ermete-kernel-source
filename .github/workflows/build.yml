@@ -17,8 +17,8 @@ jobs:
           # Creazione della directory ccache persistente sull'SSD locale
           mkdir -p /home/ermete/.ccache_chimera
           
-          # Esecuzione isolata via Podman, bypassando i limiti di GitHub Actions con rootless containers
-          podman run --rm -v ${{ github.workspace }}:/workspace -v /home/ermete/.ccache_chimera:/home/builder/.ccache -w /workspace fedora:latest bash -c "
+          # Esecuzione isolata via Podman con eccezioni SELinux/Seccomp per le policy W^X di Ermete OS
+          podman run --rm --security-opt label=disable --security-opt seccomp=unconfined -v ${{ github.workspace }}:/workspace -v /home/ermete/.ccache_chimera:/home/builder/.ccache -w /workspace fedora:latest bash -c "
           dnf update -y
           dnf install -y rpm-build rpmdevtools clang lld llvm make cmake bison flex elfutils-libelf-devel openssl-devel ncurses-devel rsync tar bc cpio python3 zstd jq curl git ccache
           
