@@ -19,8 +19,12 @@ jobs:
           
           # Esecuzione isolata via Podman con eccezioni SELinux/Seccomp per le policy W^X di Ermete OS
           podman run --rm --security-opt label=disable --security-opt seccomp=unconfined -v ${{ github.workspace }}:/workspace -v /home/ermete/.ccache_chimera:/home/builder/.ccache -w /workspace fedora:latest bash -c "
+          set -e
           dnf update -y
-          dnf install -y rpm-build rpmdevtools clang lld llvm make cmake bison flex elfutils-libelf-devel openssl-devel ncurses-devel rsync tar bc cpio python3 zstd jq curl git ccache
+          dnf install -y rpm-build rpmdevtools clang lld llvm make cmake bison flex elfutils-libelf-devel openssl-devel ncurses-devel rsync tar bc cpio python3 zstd jq curl git ccache openssl perl dwarves kmod
+          
+          # Assicura il ripristino permessi anche in caso di fallimento
+          trap \"chown -R 0:0 /workspace /home/builder/.ccache\" EXIT
           
           # Setup utente non privilegiato interno
           useradd builder -m || true
@@ -29,9 +33,6 @@ jobs:
           
           # Avvio della compilazione
           sudo -H -E -u builder bash -c \"export CC='ccache clang' && export CXX='ccache clang++' && ./build-kernel-rpm.sh\"
-          
-          # Ripristino proprietà della workspace all'host (UID 0 in rootless = ermete host)
-          chown -R 0:0 /workspace /home/builder/.ccache
           "
           
     - name: Upload Binary RPMs
