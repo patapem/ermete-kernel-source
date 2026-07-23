@@ -75,18 +75,19 @@ make -j$(nproc) bzImage modules
 
 %install
 mkdir -p %{buildroot}/boot
-mkdir -p %{buildroot}/lib/modules/%{version}-chimera
 
 make INSTALL_MOD_PATH=%{buildroot} modules_install
-cp arch/x86/boot/bzImage %{buildroot}/boot/vmlinuz-%{version}-chimera
-cp System.map %{buildroot}/boot/System.map-%{version}-chimera
-cp .config %{buildroot}/boot/config-%{version}-chimera
+KREL=$(make -s kernelrelease)
+
+cp arch/x86/boot/bzImage %{buildroot}/boot/vmlinuz-$KREL-chimera
+cp System.map %{buildroot}/boot/System.map-$KREL-chimera
+cp .config %{buildroot}/boot/config-$KREL-chimera
 
 %files
-/boot/vmlinuz-%{version}-chimera
-/boot/System.map-%{version}-chimera
-/boot/config-%{version}-chimera
-/lib/modules/%{version}-chimera
+/boot/vmlinuz-*
+/boot/System.map-*
+/boot/config-*
+/lib/modules/*
 
 %changelog
 * Thu Jul 23 2026 Kernel Alchemist <kernel@ermeteos.org> - 6.14-1.chimera
