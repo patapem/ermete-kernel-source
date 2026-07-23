@@ -40,8 +40,8 @@ Source0:        linux-cachyos.tar.gz
 Source1:        ermete-bedrock.cfg
 
 BuildRequires:  clang llvm lld
-BuildRequires:  make cmake bison flex elfutils-libelf-devel openssl-devel
-BuildRequires:  ncurses-devel rsync tar bc cpio python3 zstd
+BuildRequires:  make cmake bison flex elfutils-libelf-devel openssl-devel openssl
+BuildRequires:  ncurses-devel rsync tar bc cpio python3 zstd perl dwarves kmod
 
 # Enforce Fedora OSTree and SELinux integration
 Requires:       selinux-policy
