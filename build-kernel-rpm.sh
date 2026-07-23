@@ -5,8 +5,8 @@ echo "========================================================="
 echo " ERMETE OS CHIMERA KERNEL - RPM BUILDER"
 echo "========================================================="
 
-WORKSPACE_DIR="/var/home/ermete/GEMINI/ermete-kernel-source"
-RPMBUILD_DIR="$HOME/rpmbuild"
+WORKSPACE_DIR="/workspace"
+RPMBUILD_DIR="$WORKSPACE_DIR/rpmbuild_out"
 
 echo ">>> Preparazione ambiente rpmbuild isolato..."
 mkdir -p "$RPMBUILD_DIR"/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
