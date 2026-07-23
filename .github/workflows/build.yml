@@ -29,6 +29,9 @@ jobs:
           
           # Avvio della compilazione
           sudo -H -E -u builder bash -c \"export CC='ccache clang' && export CXX='ccache clang++' && ./build-kernel-rpm.sh\"
+          
+          # Ripristino proprietà della workspace all'host (UID 0 in rootless = ermete host)
+          chown -R 0:0 /workspace /home/builder/.ccache
           "
           
     - name: Upload Binary RPMs
