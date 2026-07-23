@@ -14,7 +14,7 @@ mkdir -p "$RPMBUILD_DIR"/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
 cd "$WORKSPACE_DIR"
 
 echo ">>> Download del Kernel CachyOS (Sorgente Pura)..."
-git clone --depth 1 https://github.com/CachyOS/linux-cachyos.git cachyos-tree
+git clone --depth 1 https://github.com/CachyOS/linux.git cachyos-tree
 
 echo ">>> Generazione dell'archivio sorgente (linux-cachyos.tar.gz)..."
 # Ignoriamo la cartella .git per ridurre il peso dell'archivio
