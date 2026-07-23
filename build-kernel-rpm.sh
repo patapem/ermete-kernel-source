@@ -29,7 +29,7 @@ sed -i 's/%prep/%prep\n%setup -c -n linux-cachyos/g' "$RPMBUILD_DIR/SPECS/ermete
 sed -i '/Source0:/a Source1:        linux-cachyos.tar.gz' "$RPMBUILD_DIR/SPECS/ermete-kernel.spec"
 
 echo ">>> Avvio compilazione RPM tramite rpmbuild..."
-rpmbuild -ba "$RPMBUILD_DIR/SPECS/ermete-kernel.spec"
+rpmbuild --define "_topdir $RPMBUILD_DIR" -ba "$RPMBUILD_DIR/SPECS/ermete-kernel.spec"
 
 echo "========================================================="
 echo " COMPILAZIONE COMPLETATA "
