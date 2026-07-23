@@ -1,7 +1,7 @@
 name: Ermete OS Chimera Kernel Build
 on:
   push:
-    branches: [ "chimera-kernel-base", "main" ]
+    branches: [ "chimera-main", "main" ]
   workflow_dispatch:
 
 jobs:
