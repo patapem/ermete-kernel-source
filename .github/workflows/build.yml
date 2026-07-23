@@ -7,7 +7,7 @@ on:
 jobs:
   build-rpm:
     name: Build Chimera Kernel RPM
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     container: fedora:latest
     steps:
     - name: Checkout Source
